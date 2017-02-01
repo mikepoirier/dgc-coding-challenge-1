@@ -11,7 +11,16 @@ class CardController {
     @PutMapping("/card")
     fun verifyCard(@RequestBody cardRequest: CardRequest): ResponseEntity<CardResponse> {
         val card = cardRequest.cardNumber
-        return ResponseEntity.ok(CardResponse(card, isValidCard(card)))
+
+        val isCardValid = isValidCard(card)
+
+        var status = 200
+
+        if(!isCardValid) {
+            status = 400
+        }
+
+        return ResponseEntity.status(status).body(CardResponse(card, isValidCard(card)))
     }
 
     fun sumDigits(number: Int): Int {
@@ -39,6 +48,26 @@ class CardController {
     }
 }
 
-data class CardRequest(val cardNumber: String)
+//class Book() {
+//    lateinit var ISBN: String
+//    lateinit var title: String
+//    lateinit var author: String
+//    var coverURL: String? = null
+//
+//    constructor(
+//            ISBN: String,
+//            title: String,
+//            author: String,
+//            coverURL: String? = null): this() {
+//        this.ISBN = ISBN
+//        this.title = title
+//        this.author = @author
+//        this.coverURL = coverURL
+//    }
+//}
+
+class CardRequest {
+    lateinit var cardNumber: String
+}
 
 data class CardResponse(val cardNumber: String, val isValid: Boolean)
