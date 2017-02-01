@@ -11,13 +11,17 @@ class CardController {
     @PutMapping("/card")
     fun verifyCard(@RequestBody cardRequest: CardRequest): ResponseEntity<CardResponse> {
         val card = cardRequest.cardNumber
+        var status = 200
+
+        if (!card.matches("[0-9]+".toRegex())) {
+            return ResponseEntity.badRequest().body(null)
+        }
 
         val isCardValid = isValidCard(card)
 
-        var status = 200
 
         if(!isCardValid) {
-            status = 400
+            return ResponseEntity.badRequest().body(null)
         }
 
         return ResponseEntity.status(status).body(CardResponse(card, isValidCard(card)))
