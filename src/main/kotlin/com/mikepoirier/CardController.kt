@@ -36,14 +36,14 @@ class CardController {
     }
 
     fun isValidCard(cardNumber: String): Boolean {
-        val cardNumberInts = cardNumber.toCharArray().map { it.toString().toInt() }
+        val cardNumberInts = cardNumber.toCharArray().reversedArray().map { it.toString().toInt() }
 
         val checksum = cardNumberInts.mapIndexed { index, value ->
             var sum = 0
             if (index % 2 == 0) {
-                sum += sumDigits(value * 2)
-            } else {
                 sum += value
+            } else {
+                sum += sumDigits(value * 2)
             }
             sum
         }.sum()
